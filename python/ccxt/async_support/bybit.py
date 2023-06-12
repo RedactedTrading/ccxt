@@ -5835,9 +5835,9 @@ class bybit(Exchange, ImplicitAPI):
         trades = self.add_pagination_cursor_to_result(response)
         return self.parse_trades(trades, market, since, limit)
 
-    async def fetch_my_contract_trades(self, symbol: Optional[str] = None, since: Optional[int] = None, limit: Optional[int] = None, params={}):
-        if symbol is None:
-            raise ArgumentsRequired(self.id + ' fetchMyContractTrades() requires a symbol argument')
+    async def fetch_my_contract_trades(self, symbol=None, since=None, limit=None, params={}):
+        # if symbol is None:
+        #     raise ArgumentsRequired(self.id + ' fetchMyContractTrades() requires a symbol argument')
         await self.load_markets()
         market = None
         request = {
