@@ -5781,8 +5781,10 @@ class bybit(Exchange, ImplicitAPI):
         #         "time": 1672283754510
         #     }
         #
-        trades = self.add_pagination_cursor_to_result(response)
-        return self.parse_trades(trades, market, since, limit)
+        result = self.safe_value(response, 'result', {})
+        cursor = self.safe_value(result, 'cursor', '')
+        trades = self.safe_value(result, 'list', [])
+        return self.parse_trades(trades, market, since, limit), cursor
 
     async def fetch_my_spot_trades(self, symbol: Optional[str] = None, since: Optional[int] = None, limit: Optional[int] = None, params={}):
         if symbol is None:
@@ -5966,8 +5968,10 @@ class bybit(Exchange, ImplicitAPI):
         #         "time": 1672283754510
         #     }
         #
-        trades = self.add_pagination_cursor_to_result(response)
-        return self.parse_trades(trades, market, since, limit)
+        result = self.safe_value(response, 'result', {})
+        cursor = self.safe_value(result, 'cursor', '')
+        trades = self.safe_value(result, 'list', [])
+        return self.parse_trades(trades, market, since, limit), cursor
 
     async def fetch_my_usdc_trades(self, symbol: Optional[str] = None, since: Optional[int] = None, limit: Optional[int] = None, params={}):
         await self.load_markets()
