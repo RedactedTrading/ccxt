@@ -5906,7 +5906,7 @@ class bybit(Exchange, ImplicitAPI):
         #     }
         #
         result = self.safe_value(response, 'result', {})
-        cursor = self.safe_value(result, 'cursor', '')
+        cursor = self.safe_value(result, 'nextPageCursor', '')
         trades = self.safe_value(result, 'list', [])
         return self.parse_trades(trades, market, since, limit), cursor
 
