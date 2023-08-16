@@ -5724,8 +5724,8 @@ class bybit(Exchange, ImplicitAPI):
         return self.parse_trades(trades, market, since, limit), cursor
 
     async def fetch_my_spot_trades(self, symbol: Optional[str] = None, since: Optional[int] = None, limit: Optional[int] = None, params={}):
-        if symbol is None:
-            raise ArgumentsRequired(self.id + ' fetchMySpotTrades() requires a symbol argument')
+        # if symbol is None:
+        #     raise ArgumentsRequired(self.id + ' fetchMySpotTrades() requires a symbol argument')
         await self.load_markets()
         market = self.market(symbol)
         request = {
@@ -5980,8 +5980,8 @@ class bybit(Exchange, ImplicitAPI):
         enableUnifiedMargin, enableUnifiedAccount = await self.is_unified_enabled()
         if enableUnifiedAccount and not isInverse:
             orderId = self.safe_string(params, 'orderId')
-            if orderId is None and type != 'spot':
-                self.check_required_symbol('fetchMyTrades', symbol)
+            # if orderId is None and type != 'spot':
+            #     self.check_required_symbol('fetchMyTrades', symbol)
             return await self.fetch_my_unified_trades(symbol, since, limit, query)
         elif type == 'spot':
             return await self.fetch_my_spot_trades(symbol, since, limit, query)
