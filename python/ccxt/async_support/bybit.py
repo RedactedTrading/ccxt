@@ -4561,7 +4561,7 @@ class bybit(Exchange, ImplicitAPI):
         #     }
         #
         trades = self.add_pagination_cursor_to_result(response)
-        return self.parse_trades(trades, market, since, limit)
+        return self.parse_trades(trades, market, since, limit), trades[0].get('nextPageCursor', None) if len(trades) > 0 else None
 
     def parse_deposit_address(self, depositAddress, currency=None):
         #
