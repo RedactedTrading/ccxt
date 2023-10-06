@@ -1607,7 +1607,6 @@ class bybit(Exchange, ImplicitAPI):
             self.fetch_future_markets({'category': 'inverse'}),
             self.fetch_option_markets({'baseCoin': 'BTC'}),
             self.fetch_option_markets({'baseCoin': 'ETH'}),
-            self.fetch_option_markets({'baseCoin': 'SOL'}),
         ]
         promises = await asyncio.gather(*promisesUnresolved)
         spotMarkets = promises[0]
@@ -1615,10 +1614,8 @@ class bybit(Exchange, ImplicitAPI):
         inverseMarkets = promises[2]
         btcOptionMarkets = promises[3]
         ethOptionMarkets = promises[4]
-        solOptionMarkets = promises[5]
         futureMarkets = self.array_concat(linearMarkets, inverseMarkets)
         optionMarkets = self.array_concat(btcOptionMarkets, ethOptionMarkets)
-        optionMarkets = self.array_concat(optionMarkets, solOptionMarkets)
         derivativeMarkets = self.array_concat(futureMarkets, optionMarkets)
         return self.array_concat(spotMarkets, derivativeMarkets)
 
