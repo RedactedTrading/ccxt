@@ -36,7 +36,7 @@ from ccxt.base.errors import AuthenticationError
 from ccxt.base.decimal_to_precision import TRUNCATE
 from ccxt.base.decimal_to_precision import DECIMAL_PLACES
 from ccxt.base.precise import Precise
-
+import pandas as pd
 
 class binance(Exchange, ImplicitAPI):
 
@@ -4140,7 +4140,7 @@ class binance(Exchange, ImplicitAPI):
         :param boolean [params.test]: *spot only* whether to use the test endpoint or not, default is False
         :returns dict: an `order structure <https://github.com/ccxt/ccxt/wiki/Manual#order-structure>`
         """
-        await self.load_markets()
+        # await self.load_markets()
         market = self.market(symbol)
         marketType = self.safe_string(params, 'type', market['type'])
         marginMode, query = self.handle_margin_mode_and_params('createOrder', params)
@@ -4163,8 +4163,14 @@ class binance(Exchange, ImplicitAPI):
             test = self.safe_value(query, 'test', False)
             if test:
                 method += 'Test'
+        ccxt_sending_ts = pd.to_datetime('now', utc=True)
         response = await getattr(self, method)(request)
-        return self.parse_order(response, market)
+        exchange_ts = response['updateTime']
+        return {
+            **self.parse_order(response, market),
+            'ccxt_sending_ts': ccxt_sending_ts,
+            'ccxt_exchange_ts': exchange_ts
+        }
 
     def create_order_request(self, symbol: str, type: OrderType, side: OrderSide, amount, price=None, params={}):
         """
@@ -4685,8 +4691,8 @@ class binance(Exchange, ImplicitAPI):
         market = self.market(symbol)
         type = self.safe_string(params, 'type', market['type'])
         params = self.omit(params, 'type')
-        if type != 'spot':
-            raise NotSupported(self.id + ' fetchOrderTrades() supports spot markets only')
+        # if type != 'spot':
+        #     raise NotSupported(self.id + ' fetchOrderTrades() supports spot markets only')
         request = {
             'orderId': id,
         }
