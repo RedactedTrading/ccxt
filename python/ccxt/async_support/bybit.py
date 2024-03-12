@@ -3520,7 +3520,7 @@ class bybit(Exchange, ImplicitAPI):
             return await self.create_usdc_order(symbol, type, side, amount, price, params)
         trailingAmount = self.safe_string_2(params, 'trailingAmount', 'trailingStop')
         isTrailingAmountOrder = trailingAmount is not None
-        orderRequest = self.create_order_request(symbol, type, side, amount, price, params, enableUnifiedAccount)
+        orderRequest = self.create_order_request(symbol, type, side, amount, price, params, isUnifiedAccount)
         response = None
         if isTrailingAmountOrder:
             response = await self.privatePostV5PositionTradingStop(orderRequest)
